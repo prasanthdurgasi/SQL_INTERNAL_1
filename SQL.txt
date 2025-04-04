@@ -1,0 +1,1090 @@
+SQL> create table emp(ID NUMBER(4),NAME VARCHAR(10),AGE NUMBER(3));
+
+Table created.
+
+SQL> desc emp;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                                 NUMBER(4)
+ NAME                                               VARCHAR2(10)
+ AGE                                                NUMBER(3)
+
+SQL> insert into emp values(&ID,'&NAME',&AGE);
+Enter value for id: 1
+Enter value for name: SANTHU
+Enter value for age: 21
+old   1: insert into emp values(&ID,'&NAME',&AGE)
+new   1: insert into emp values(1,'SANTHU',21)
+
+1 row created.
+
+SQL> /
+Enter value for id: 2
+Enter value for name: SAHITI
+Enter value for age: 20
+old   1: insert into emp values(&ID,'&NAME',&AGE)
+new   1: insert into emp values(2,'SAHITI',20)
+
+1 row created.
+
+SQL> select*from emp;
+
+        ID NAME              AGE
+---------- ---------- ----------
+         1 SANTHU             21
+         2 SAHITI             20
+
+SQL> alter table emp add(SALARY NUMBER(8));
+
+Table altered.
+
+SQL> select*from emp;
+
+        ID NAME              AGE     SALARY
+---------- ---------- ---------- ----------
+         1 SANTHU             21
+         2 SAHITI             20
+
+SQL> update table emp set salary=50000 where ID=1;
+update table emp set salary=50000 where ID=1
+       *
+ERROR at line 1:
+ORA-00903: invalid table name
+
+
+SQL> update emp set salary=50000 where ID=1;
+
+1 row updated.
+
+SQL> update emp set salary=58000 where ID=2;
+
+1 row updated.
+
+SQL> select*from emp;
+
+        ID NAME              AGE     SALARY
+---------- ---------- ---------- ----------
+         1 SANTHU             21      50000
+         2 SAHITI             20      58000
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> rollback;
+
+Rollback complete.
+
+SQL> select*from emp;
+
+        ID NAME              AGE     SALARY
+---------- ---------- ---------- ----------
+         1 SANTHU             21      50000
+         2 SAHITI             20      58000
+
+SQL> update emp set age=21 where id=2;
+
+1 row updated.
+
+SQL> select*from emp;
+
+        ID NAME              AGE     SALARY
+---------- ---------- ---------- ----------
+         1 SANTHU             21      50000
+         2 SAHITI             21      58000
+
+SQL> rollback;
+
+Rollback complete.
+
+SQL> select*from emp;
+
+        ID NAME              AGE     SALARY
+---------- ---------- ---------- ----------
+         1 SANTHU             21      50000
+         2 SAHITI             20      58000
+
+SQL> select * from emp ORDER BY AGE;
+
+        ID NAME              AGE     SALARY
+---------- ---------- ---------- ----------
+         2 SAHITI             20      58000
+         1 SANTHU             21      50000
+
+SQL> select * from emp ORDER BY SALARY;
+
+        ID NAME              AGE     SALARY
+---------- ---------- ---------- ----------
+         1 SANTHU             21      50000
+         2 SAHITI             20      58000
+
+SQL> select * from emp GROUP  BY SALARY AND AGE;
+select * from emp GROUP  BY SALARY AND AGE
+                                   *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended
+
+
+SQL> SELECT * FROM emp GROUP BY salary, age;
+SELECT * FROM emp GROUP BY salary, age
+       *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression
+
+
+SQL> SELECT * FROM emp GROUP BY salary,ID;
+SELECT * FROM emp GROUP BY salary,ID
+       *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression
+
+
+SQL> SELECT salary, age FROM emp GROUP BY salary, age;
+
+    SALARY        AGE
+---------- ----------
+     50000         21
+     58000         20
+
+SQL> alter table emp drop column age;
+
+Table altered.
+
+SQL> select*from emp;
+
+        ID NAME           SALARY
+---------- ---------- ----------
+         1 SANTHU          50000
+         2 SAHITI          58000
+
+
+SQL> select*from emp;
+
+        ID NAME           SALARY
+---------- ---------- ----------
+         1 SANTHU          50000
+         2 SAHITI          58000
+
+SQL> select min(salary) from emp;
+
+MIN(SALARY)
+-----------
+      50000
+
+SQL> select max(*) from emp;
+select max(*) from emp
+           *
+ERROR at line 1:
+ORA-00936: missing expression
+
+
+SQL> select max from emp;
+select max from emp
+       *
+ERROR at line 1:
+ORA-00904: "MAX": invalid identifier
+
+
+SQL> select * from emp where min(salary);
+select * from emp where min(salary)
+                        *
+ERROR at line 1:
+ORA-00934: group function is not allowed here
+
+
+SQL> SELECT * FROM emp WHERE MIN(salary);
+SELECT * FROM emp WHERE MIN(salary)
+                        *
+ERROR at line 1:
+ORA-00934: group function is not allowed here
+
+
+SQL> SELECT * FROM emp
+  2  WHERE salary = (SELECT MIN(salary) FROM emp);
+
+        ID NAME           SALARY
+---------- ---------- ----------
+         1 SANTHU          50000
+
+SQL> select max(id) from emp;
+
+   MAX(ID)
+----------
+         2
+
+SQL> select avg(id) from emp;
+
+   AVG(ID)
+----------
+       1.5
+
+SQL> select sum(id) from emp;
+
+   SUM(ID)
+----------
+         3
+
+SQL> select count(id) from emp;
+
+ COUNT(ID)
+----------
+         2
+
+SQL>CREATE TABLE employees2(
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    department VARCHAR(50),
+    email VARCHAR(100),
+    salary INT
+);
+
+INSERT INTO employees2(id, name, department, email, salary) VALUES
+(1, 'Alice Johnson', 'HR', 'alice.hr@example.com', 50000),
+(2, 'Bob Smith', 'IT', 'bob.it@example.com', 60000),
+(3, 'Charlie Brown', 'Finance', 'charlie.finance@example.com', 55000),
+(4, 'David Lee', 'IT', 'david.it@example.com', 70000),
+(5, 'Eve Adams', 'Marketing', 'eve.marketing@example.com', 52000);
+
+SQL> select * from employee2;
+select * from employee2
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> select * from employees2;
+
+        ID NAME
+---------- --------------------------------------------------
+DEPARTMENT
+--------------------------------------------------
+EMAIL
+--------------------------------------------------------------------------------
+    SALARY
+----------
+         1 Alice Johnson
+HR
+alice.hr@example.com
+     50000
+
+
+        ID NAME
+---------- --------------------------------------------------
+DEPARTMENT
+--------------------------------------------------
+EMAIL
+--------------------------------------------------------------------------------
+    SALARY
+----------
+         2 Bob Smith
+IT
+bob.it@example.com
+     60000
+
+
+        ID NAME
+---------- --------------------------------------------------
+DEPARTMENT
+--------------------------------------------------
+EMAIL
+--------------------------------------------------------------------------------
+    SALARY
+----------
+         3 Charlie Brown
+Finance
+charlie.finance@example.com
+     55000
+
+
+        ID NAME
+---------- --------------------------------------------------
+DEPARTMENT
+--------------------------------------------------
+EMAIL
+--------------------------------------------------------------------------------
+    SALARY
+----------
+         4 David Lee
+IT
+david.it@example.com
+     70000
+
+
+        ID NAME
+---------- --------------------------------------------------
+DEPARTMENT
+--------------------------------------------------
+EMAIL
+--------------------------------------------------------------------------------
+    SALARY
+----------
+         5 Eve Adams
+Marketing
+eve.marketing@example.com
+     52000
+
+
+SQL> SET LINESIZE 200;
+SQL> select * from employees2;
+
+        ID NAME                                               DEPARTMENT
+---------- -------------------------------------------------- --------------------------------------------------
+EMAIL                                                                                                    SALARY
+---------------------------------------------------------------------------------------------------- ----------
+         1 Alice Johnson                                      HR
+alice.hr@example.com                                                                                      50000
+
+         2 Bob Smith                                          IT
+bob.it@example.com                                                                                        60000
+
+         3 Charlie Brown                                      Finance
+charlie.finance@example.com                                                                               55000
+
+
+        ID NAME                                               DEPARTMENT
+---------- -------------------------------------------------- --------------------------------------------------
+EMAIL                                                                                                    SALARY
+---------------------------------------------------------------------------------------------------- ----------
+         4 David Lee                                          IT
+david.it@example.com                                                                                      70000
+
+         5 Eve Adams                                          Marketing
+eve.marketing@example.com                                                                                 52000
+
+
+SQL> SET LINESIZE 400;
+SQL> select * from employees2;
+
+        ID NAME                                               DEPARTMENT                                         EMAIL                                       SALARY
+---------- -------------------------------------------------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------
+         1 Alice Johnson                                      HR                                                 alice.hr@example.com                         50000
+         2 Bob Smith                                          IT                                                 bob.it@example.com                           60000
+         3 Charlie Brown                                      Finance                                            charlie.finance@example.com                  55000
+         4 David Lee                                          IT                                                 david.it@example.com                         70000
+         5 Eve Adams                                          Marketing                                          eve.marketing@example.com                    52000
+
+SQL> select upper('santhu') from dual;
+
+UPPER(
+------
+SANTHU
+
+SQL> select lower('SAHITI') from dual;
+
+LOWER(
+------
+sahiti
+
+SQL> select length('SAHITI') from dual;
+
+LENGTH('SAHITI')
+----------------
+               6
+
+SQL> select ASCII('@') from dual;
+
+ASCII('@')
+----------
+        64
+
+SQL> select ASCII('8') from dual;
+
+ASCII('8')
+----------
+        56
+
+SQL> select ASCII('A') from dual;
+
+ASCII('A')
+----------
+        65
+
+SQL> select ASCII('a') from dual;
+
+ASCII('A')
+----------
+        97
+
+SQL> select concat('a','pple') from dual;
+
+CONCA
+-----
+apple
+
+SQL> select trim(' a','ppl e') from dual;
+select trim(' a','ppl e') from dual
+                *
+ERROR at line 1:
+ORA-00907: missing right parenthesis
+
+
+SQL> select trim('a ppl e') from dual;
+
+TRIM('A
+-------
+a ppl e
+
+SQL> select trim(' a ppl e') from dual;
+
+TRIM('A
+-------
+a ppl e
+
+SQL> select trim(' a ppl e ') from dual;
+
+TRIM('A
+-------
+a ppl e
+
+SQL> select pad(' a ppl e ') from dual;
+select pad(' a ppl e ') from dual
+       *
+ERROR at line 1:
+ORA-00904: "PAD": invalid identifier
+
+
+SQL> select lpad(' a ppl e ') from dual;
+select lpad(' a ppl e ') from dual
+       *
+ERROR at line 1:
+ORA-00938: not enough arguments for function
+
+
+SQL> SELECT name, LPAD(name, 15, '*') AS padded_name FROM employees2;
+
+NAME                                               PADDED_NAME
+-------------------------------------------------- ------------------------------------------------------------
+Alice Johnson                                      **Alice Johnson
+Bob Smith                                          ******Bob Smith
+Charlie Brown                                      **Charlie Brown
+David Lee                                          ******David Lee
+Eve Adams                                          ******Eve Adams
+
+SQL> SELECT LPAD('SQL', 6, ' ') from dual;
+
+LPAD('
+------
+   SQL
+
+SQL> SELECT RPAD('SQL', 6, ' ') from dual;
+
+RPAD('
+------
+SQL
+
+SQL> SELECT RPAD('SQL', 6, '1') from dual;
+
+RPAD('
+------
+SQL111
+
+SQL> select lpad('apple',4,'1') from dual;
+
+LPAD
+----
+appl
+
+SQL> select lpad('apple',10,'1') from dual;
+
+LPAD('APPL
+----------
+11111apple
+
+SQL> select Rpad('apple',10,'1') from dual;
+
+RPAD('APPL
+----------
+apple11111
+
+SQL> select pad('apple',10,'1') from dual;
+select pad('apple',10,'1') from dual
+       *
+ERROR at line 1:
+ORA-00904: "PAD": invalid identifier
+
+
+SQL> select REVERSE('apple') from dual;
+
+REVER
+-----
+elppa
+
+SQL> select REPLACE('apple','p','k') from dual;
+
+REPLA
+-----
+Akkle
+
+
+
+SQL> select abs(-3.456) from dual;
+
+ABS(-3.456)
+-----------
+      3.456
+
+SQL> select abs(3.456) from dual;
+
+ABS(3.456)
+----------
+     3.456
+
+SQL> select cos(0) from dual;
+
+    COS(0)
+----------
+         1
+
+SQL> select sin(90) from dual;
+
+   SIN(90)
+----------
+.893996664
+
+SQL> select tan(45) from dual;
+
+   TAN(45)
+----------
+1.61977519
+
+SQL> select atan(45) from dual;
+
+  ATAN(45)
+----------
+1.54857776
+
+SQL> select acos(45) from dual;
+select acos(45) from dual
+            *
+ERROR at line 1:
+ORA-01428: argument '45' is out of range
+
+
+SQL> select acos(1) from dual;
+
+   ACOS(1)
+----------
+         0
+
+SQL> select atan(1) from dual;
+
+   ATAN(1)
+----------
+.785398163
+
+SQL> select asin(1) from dual;
+
+   ASIN(1)
+----------
+1.57079633
+
+SQL> select pi from dual;
+select pi from dual
+       *
+ERROR at line 1:
+ORA-00904: "PI": invalid identifier
+
+
+SQL> select pi() from dual;
+select pi() from dual
+       *
+ERROR at line 1:
+ORA-00904: "PI": invalid identifier
+
+
+SQL> select math.pi() from dual;
+select math.pi() from dual
+       *
+ERROR at line 1:
+ORA-00904: "MATH"."PI": invalid identifier
+
+
+SQL> SELECT ACOS(-1) AS pi_value FROM dual;
+
+  PI_VALUE
+----------
+3.14159265
+
+SQL> select ceil(1.56) from dual;
+
+CEIL(1.56)
+----------
+         2
+
+SQL> select floor(1.56) from dual;
+
+FLOOR(1.56)
+-----------
+          1
+
+SQL> select pow(10,2) from dual;
+select pow(10,2) from dual
+       *
+ERROR at line 1:
+ORA-00904: "POW": invalid identifier
+
+
+SQL> select power(10,2) from dual;
+
+POWER(10,2)
+-----------
+        100
+
+SQL> select power(10,6) from dual;
+
+POWER(10,6)
+-----------
+    1000000
+
+SQL> select round(1.56) from dual;
+
+ROUND(1.56)
+-----------
+          2
+
+SQL> select round(1.50) from dual;
+
+ROUND(1.50)
+-----------
+          2
+
+SQL> select round(1.49) from dual;
+
+ROUND(1.49)
+-----------
+          1
+
+SQL> select round(1.4999) from dual;
+
+ROUND(1.4999)
+-------------
+            1
+
+SQL> select exp(10) from dual;
+
+   EXP(10)
+----------
+22026.4658
+
+SQL> select exp(1) from dual;
+
+    EXP(1)
+----------
+2.71828183
+
+SQL> select exp(0) from dual;
+
+    EXP(0)
+----------
+         1
+
+SQL> select sign(-12) from dual;
+
+ SIGN(-12)
+----------
+        -1
+
+SQL> select sign(12) from dual;
+
+  SIGN(12)
+----------
+         1
+
+SQL> select sign(0) from dual;
+
+   SIGN(0)
+----------
+         0
+
+SQL> select sign(660) from dual;
+
+ SIGN(660)
+----------
+         1
+SQL> select 30+40 from dual;
+
+     30+40
+----------
+        70
+
+SQL> select 30-40 from dual;
+
+     30-40
+----------
+       -10
+
+SQL> select 3*40 from dual;
+
+      3*40
+----------
+       120
+
+SQL> select 32/4 from dual;
+
+      32/4
+----------
+         8
+
+SQL> select 32%5 from dual;
+select 32%5 from dual
+         *
+ERROR at line 1:
+ORA-00911: invalid character
+
+
+SQL> SELECT MOD(32, 5) FROM dual;
+
+ MOD(32,5)
+----------
+         2
+
+SQL> select * from employees2;
+
+        ID NAME                                               DEPARTMENT                                         EMAIL                                       SALARY
+---------- -------------------------------------------------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------
+         1 Alice Johnson                                      HR                                                 alice.hr@example.com                         50000
+         2 Bob Smith                                          IT                                                 bob.it@example.com                           60000
+         3 Charlie Brown                                      Finance                                            charlie.finance@example.com                  55000
+         4 David Lee                                          IT                                                 david.it@example.com                         70000
+         5 Eve Adams                                          Marketing                                          eve.marketing@example.com                    52000
+
+SQL> select * from employees2 where department='IT' AND ID=2;
+
+        ID NAME                                               DEPARTMENT                                         EMAIL                                       SALARY
+---------- -------------------------------------------------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------
+         2 Bob Smith                                          IT                                                 bob.it@example.com                           60000
+
+SQL> select * from employees2 where department='IT' OR ID=2;
+
+        ID NAME                                               DEPARTMENT                                         EMAIL                                       SALARY
+---------- -------------------------------------------------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------
+         2 Bob Smith                                          IT                                                 bob.it@example.com                           60000
+         4 David Lee                                          IT                                                 david.it@example.com                         70000
+
+SQL> select * from employees2 where department='IT' NAND ID=2;
+select * from employees2 where department='IT' NAND ID=2
+                                               *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended
+
+
+SQL> SELECT * FROM employees2
+  2  WHERE NOT (department = 'IT' AND ID = 2);
+
+        ID NAME                                               DEPARTMENT                                         EMAIL                                       SALARY
+---------- -------------------------------------------------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------
+         1 Alice Johnson                                      HR                                                 alice.hr@example.com                         50000
+         3 Charlie Brown                                      Finance                                            charlie.finance@example.com                  55000
+         4 David Lee                                          IT                                                 david.it@example.com                         70000
+         5 Eve Adams                                          Marketing                                          eve.marketing@example.com                    52000
+
+SQL> SELECT * FROM employees2 WHERE SALARY > 50000;
+
+        ID NAME                                               DEPARTMENT                                         EMAIL                                       SALARY
+---------- -------------------------------------------------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------
+         2 Bob Smith                                          IT                                                 bob.it@example.com                           60000
+         3 Charlie Brown                                      Finance                                            charlie.finance@example.com                  55000
+         4 David Lee                                          IT                                                 david.it@example.com                         70000
+         5 Eve Adams                                          Marketing                                          eve.marketing@example.com                    52000
+
+SQL> SELECT * FROM employees2 WHERE SALARY < 50000;
+
+no rows selected
+
+SQL> SELECT * FROM employees2 WHERE SALARY !< 50000;
+SELECT * FROM employees2 WHERE SALARY !< 50000
+                                       *
+ERROR at line 1:
+ORA-00927: missing equal sign
+
+
+SQL> SELECT * FROM employees2 WHERE SALARY < 55000;
+
+        ID NAME                                               DEPARTMENT                                         EMAIL                                       SALARY
+---------- -------------------------------------------------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------
+         1 Alice Johnson                                      HR                                                 alice.hr@example.com                         50000
+         5 Eve Adams                                          Marketing                                          eve.marketing@example.com                    52000
+
+SQL> SELECT * FROM employees2 WHERE SALARY = 55000;
+
+        ID NAME                                               DEPARTMENT                                         EMAIL                                       SALARY
+---------- -------------------------------------------------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------
+         3 Charlie Brown                                      Finance                                            charlie.finance@example.com                  55000
+
+SQL> SELECT * FROM employees2 WHERE SALARY != 55000;
+
+        ID NAME                                               DEPARTMENT                                         EMAIL                                       SALARY
+---------- -------------------------------------------------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------
+         1 Alice Johnson                                      HR                                                 alice.hr@example.com                         50000
+         2 Bob Smith                                          IT                                                 bob.it@example.com                           60000
+         4 David Lee                                          IT                                                 david.it@example.com                         70000
+         5 Eve Adams                                          Marketing                                          eve.marketing@example.com                    52000
+
+SQL> SELECT * FROM employees2 WHERE SALARY <= 55000;
+
+        ID NAME                                               DEPARTMENT                                         EMAIL                                       SALARY
+---------- -------------------------------------------------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------
+         1 Alice Johnson                                      HR                                                 alice.hr@example.com                         50000
+         3 Charlie Brown                                      Finance                                            charlie.finance@example.com                  55000
+         5 Eve Adams                                          Marketing                                          eve.marketing@example.com                    52000
+
+SQL> SELECT * FROM employees2 WHERE SALARY >= 55000;
+
+        ID NAME                                               DEPARTMENT                                         EMAIL                                       SALARY
+---------- -------------------------------------------------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------
+         2 Bob Smith                                          IT                                                 bob.it@example.com                           60000
+         3 Charlie Brown                                      Finance                                            charlie.finance@example.com                  55000
+         4 David Lee                                          IT                                                 david.it@example.com                         70000
+
+SQL> SELECT * FROM employees2 WHERE NAME='%h';
+
+no rows selected
+
+SQL> SELECT * FROM employees2 WHERE NAME='%a';
+
+no rows selected
+
+SQL> SELECT * FROM employees2 WHERE NAME='%B';
+
+no rows selected
+
+SQL> SELECT * FROM employees2 WHERE NAME='B%';
+
+no rows selected
+
+SQL> SELECT * FROM employees2 WHERE NAME='%B%';
+
+no rows selected
+
+SQL> SELECT * FROM employees2 WHERE NAME='%a%';
+
+no rows selected
+
+SQL> SELECT * FROM employees2 WHERE NAME like'%a%';
+
+        ID NAME                                               DEPARTMENT                                         EMAIL                                       SALARY
+---------- -------------------------------------------------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------
+         3 Charlie Brown                                      Finance                                            charlie.finance@example.com                  55000
+         4 David Lee                                          IT                                                 david.it@example.com                         70000
+         5 Eve Adams                                          Marketing                                          eve.marketing@example.com                    52000
+
+SQL> SELECT * FROM employees2 WHERE NAME like'%a';
+
+no rows selected
+
+SQL> SELECT * FROM employees2 WHERE NAME like'a%';
+
+no rows selected
+
+SQL> SELECT * FROM employees2 WHERE NAME like'B%';
+
+        ID NAME                                               DEPARTMENT                                         EMAIL                                       SALARY
+---------- -------------------------------------------------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------
+         2 Bob Smith                                          IT                                                 bob.it@example.com                           60000
+
+SQL> SELECT * FROM employees2 WHERE NAME like'B%' and length(name)=9;
+
+        ID NAME                                               DEPARTMENT                                         EMAIL                                       SALARY
+---------- -------------------------------------------------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------
+         2 Bob Smith                                          IT                                                 bob.it@example.com                           60000
+
+SQL> SELECT * FROM employees2 WHERE ID IN 2;
+
+        ID NAME                                               DEPARTMENT                                         EMAIL                                       SALARY
+---------- -------------------------------------------------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------
+         2 Bob Smith                                          IT                                                 bob.it@example.com                           60000
+
+SQL> SELECT * FROM employees2 WHERE ID NOT(IN 2);
+SELECT * FROM employees2 WHERE ID NOT(IN 2)
+                                     *
+ERROR at line 1:
+ORA-00920: invalid relational operator
+
+
+SQL> SELECT * FROM employees2 WHERE ID NOT(IN)2;
+SELECT * FROM employees2 WHERE ID NOT(IN)2
+                                     *
+ERROR at line 1:
+ORA-00920: invalid relational operator
+
+
+SQL> SELECT * FROM employees2 WHERE ID NOT(IN) 2;
+SELECT * FROM employees2 WHERE ID NOT(IN) 2
+                                     *
+ERROR at line 1:
+ORA-00920: invalid relational operator
+
+
+SQL> SELECT * FROM employees2 WHERE ID NOTIN 2;
+SELECT * FROM employees2 WHERE ID NOTIN 2
+                                  *
+ERROR at line 1:
+ORA-00920: invalid relational operator
+
+
+SQL> SELECT * FROM employees2 WHERE ID NOT IN (2);
+
+        ID NAME                                               DEPARTMENT                                         EMAIL                                       SALARY
+---------- -------------------------------------------------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------
+         1 Alice Johnson                                      HR                                                 alice.hr@example.com                         50000
+         3 Charlie Brown                                      Finance                                            charlie.finance@example.com                  55000
+         4 David Lee                                          IT                                                 david.it@example.com                         70000
+         5 Eve Adams                                          Marketing                                          eve.marketing@example.com                    52000
+
+SQL> SELECT * FROM employees2 WHERE SALARY BETWEEN 55000 TO 70000;
+SELECT * FROM employees2 WHERE SALARY BETWEEN 55000 TO 70000
+                                                    *
+ERROR at line 1:
+ORA-00905: missing keyword
+
+
+SQL>
+SQL> SELECT * FROM employees2 WHERE SALARY BETWEEN 55000,70000;
+SELECT * FROM employees2 WHERE SALARY BETWEEN 55000,70000
+                                                   *
+ERROR at line 1:
+ORA-00905: missing keyword
+
+
+SQL> SELECT * FROM employees2 WHERE SALARY BETWEEN 55000 to 70000;
+SELECT * FROM employees2 WHERE SALARY BETWEEN 55000 to 70000
+                                                    *
+ERROR at line 1:
+ORA-00905: missing keyword
+
+
+SQL> SELECT * FROM employees2 WHERE SALARY BETWEEN 55000 AND 70000;
+
+        ID NAME                                               DEPARTMENT                                         EMAIL                                       SALARY
+---------- -------------------------------------------------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------
+         2 Bob Smith                                          IT                                                 bob.it@example.com                           60000
+         3 Charlie Brown                                      Finance                                            charlie.finance@example.com                  55000
+         4 David Lee                                          IT                                                 david.it@example.com                         70000
+
+SQL> SELECT distinct department from employees2;
+
+DEPARTMENT
+--------------------------------------------------
+HR
+IT
+Finance
+Marketing
+
+SQL>
+SQL>
+SQL> SELECT SYSDATE from dual;
+
+SYSDATE
+---------
+03-APR-25
+
+SQL> SELECT current_DATE from dual;
+
+CURRENT_D
+---------
+03-APR-25
+
+SQL> SELECT add_months(SYSDATE,6) from dual;
+
+ADD_MONTH
+---------
+03-OCT-25
+
+SQL> SELECT LASTDAY(SYSDATE) from dual;
+SELECT LASTDAY(SYSDATE) from dual
+       *
+ERROR at line 1:
+ORA-00904: "LASTDAY": invalid identifier
+
+
+SQL> SELECT LAST_DAY(SYSDATE) from dual;
+
+LAST_DAY(
+---------
+30-APR-25
+
+SQL> SELECT NEXT_DAY(SYSDATE) from dual;
+SELECT NEXT_DAY(SYSDATE) from dual
+       *
+ERROR at line 1:
+ORA-00909: invalid number of arguments
+
+
+SQL> SELECT NEXT_DAY(SYSDATE,'SUNDAY') from dual;
+
+NEXT_DAY(
+---------
+06-APR-25
+
+SQL> SELECT NEXT_DAY(SYSDATE,'MONDAY') from dual;
+
+NEXT_DAY(
+---------
+07-APR-25
+
+SQL> SELECT NEXT_DAY(SYSDATE,'CURRENT_DATE') from dual;
+SELECT NEXT_DAY(SYSDATE,'CURRENT_DATE') from dual
+                        *
+ERROR at line 1:
+ORA-01846: not a valid day of the week
+
+
+SQL> SELECT MONTH_BETWEEN(TO_DATE('2025-01-02','YYYY-MM-DD') from dual;
+SELECT MONTH_BETWEEN(TO_DATE('2025-01-02','YYYY-MM-DD') from dual
+                                                        *
+ERROR at line 1:
+ORA-00907: missing right parenthesis
+
+
+SQL> SELECT MONTH_BETWEEN(TO_DATE('2025-01-02','YYYY-MM-DD')SYSDATE)from dual;
+SELECT MONTH_BETWEEN(TO_DATE('2025-01-02','YYYY-MM-DD')SYSDATE)from dual
+                                                       *
+ERROR at line 1:
+ORA-00907: missing right parenthesis
+
+
+SQL> SELECT MONTH_BETWEEN(TO_DATE('2025-01-02','YYYY-MM-DD'),SYSDATE)from dual;
+SELECT MONTH_BETWEEN(TO_DATE('2025-01-02','YYYY-MM-DD'),SYSDATE)from dual
+       *
+ERROR at line 1:
+ORA-00904: "MONTH_BETWEEN": invalid identifier
+
+
+SQL> SELECT MONTHS_BETWEEN(TO_DATE('2025-01-02', 'YYYY-MM-DD'), SYSDATE) FROM dual;
+
+MONTHS_BETWEEN(TO_DATE('2025-01-02','YYYY-MM-DD'),SYSDATE)
+----------------------------------------------------------
+                                                -3.0569963
+
+SQL> SELECT MONTH_BETWEEN(TO_DATE('2025-01-02','YYYY-MM-DD'),SYSDATE) from dual;
+SELECT MONTH_BETWEEN(TO_DATE('2025-01-02','YYYY-MM-DD'),SYSDATE) from dual
+       *
+ERROR at line 1:
+ORA-00904: "MONTH_BETWEEN": invalid identifier
+
+
+SQL> SELECT MONTHS_BETWEEN(TO_DATE('2025-01-02','YYYY-MM-DD'),SYSDATE) from dual;
+
+MONTHS_BETWEEN(TO_DATE('2025-01-02','YYYY-MM-DD'),SYSDATE)
+----------------------------------------------------------
+                                                -3.0570128
+
+SQL> SELECT ROUND(SYSDATE,'MM') from dual;
+
+ROUND(SYS
+---------
+01-APR-25
+
+SQL> SELECT EXTRACT(YEAR FROM SYSDATE) as year from dual;
+
+      YEAR
+----------
+      2025
+
+SQL> SELECT Trunc(SYSDATE,'mm')from dual;
+
+TRUNC(SYS
+---------
+01-APR-25
+
+SQL>
